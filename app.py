@@ -5,14 +5,14 @@ import plotly.express as px
 #Definir o título da página, o ícone e o layout
 st.set_page_config(
     page_title = "Dashboard de Salários Anuais na Área de Dados",
-    page_icon = "💸", #https://streamlit-emoji-shortcodes-streamlit-app-gwckff.streamlit.app/
+    page_icon = ":signal_strength:", #https://streamlit-emoji-shortcodes-streamlit-app-gwckff.streamlit.app/
     layout = "wide",
 )
 
 df = pd.read_csv("https://raw.githubusercontent.com/Tamiris-Siqueira/imersao-dados-alura/refs/heads/main/dados_tratados_imersao.csv")
 
 #Definir os filtros que estarão disponíveis em um menu lateral
-st.sidebar.header("🔍 Filtros")
+st.sidebar.header(":mag: Filtros")
 
 #Filtro de Ano
 anos_disponiveis = sorted(df['ano'].unique())
@@ -39,8 +39,8 @@ df_filtrado = df[
 ]
 
 #Exibir as informações em tela
-st.title("Dashboard: Análise Salarial na Área de Dados")
-st.markdown("Explore os dados salariais anuais na área de dados dos últimos anos")
+st.title(":money_with_wings: Dashboard: Análise Salarial na Área de Dados")
+st.markdown("Explore os dados salariais anuais na área de dados dos últimos anos:")
 
 #Exibição das métricas
 st.subheader("Principais Métricas")
@@ -65,7 +65,7 @@ col4.metric("Cargo mais frequente: ", cargo_mais_frequente)
 st.markdown("---")
 
 #Exibição dos gráficos
-st.subheader("Gráficos")
+st.subheader("Principais Gráficos")
 
 #dividir a exibição dos gráficos em 1 coluna
 #col_graf1 = st.columns()
@@ -140,8 +140,9 @@ else:
 
 st.markdown("---")
 
-st.subheader("Dados Detalhados")
+st.subheader(":book: Dados Detalhados")
 if not df_filtrado.empty:
     st.dataframe(df_filtrado)
 else:
     st.warning("Nenhum dado a ser exibido, selecione um filtro.")
+
