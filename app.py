@@ -9,7 +9,7 @@ st.set_page_config(
     layout = "wide",
 )
 
-df = pd.read_csv("dados_tratados_imersao.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/Tamiris-Siqueira/imersao-dados-alura/refs/heads/main/dados_tratados_imersao.csv")
 
 #Definir os filtros que estarão disponíveis em um menu lateral
 st.sidebar.header("🔍 Filtros")
@@ -142,4 +142,5 @@ st.subheader("Dados Detalhados")
 if not df_filtrado.empty:
     st.dataframe(df_filtrado)
 else:
+
     st.warning("Nenhum dado a ser exibido, selecione um filtro.")
