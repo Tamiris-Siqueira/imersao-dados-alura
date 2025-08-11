@@ -62,30 +62,32 @@ col2.metric("Salário Máximo Anual: ", f"${salario_maximo:,.0f}")
 col3.metric("Total de Registros: ", f"${total_registros:,.0f}")
 col4.metric("Cargo mais frequente: ", cargo_mais_frequente)
 
-st.markdown("--")
+st.markdown("---")
 
 #Exibição dos gráficos
 st.subheader("Gráficos")
 
-#dividir a exibição dos gráficos em 2 colunas
-col_graf1, col_graf2 = st.columns(2)
+#dividir a exibição dos gráficos em 1 coluna
+#col_graf1 = st.columns()
 
-with col_graf1:
-    if not df_filtrado.empty:
-        #exibir os 10 maiores cargos
-        top_cargos = df_filtrado.groupby('cargo')['salario_usd'].mean().nlargest(10).sort_values(ascending = True).reset_index()
-        grafico_barra_cargos = px.bar(
-            top_cargos,
-            x = 'salario_usd',
-            y = "cargo",
-            orientation = 'h', #exibição na horizontal
-            title = 'Top 10 Cargos por Salário',
-            labels = {'salario_usd': 'Salário Médio Anual (USD)', 'cargo': ''}
-        )
-        grafico_barra_cargos.update_layout(title_x = 0.1, yaxis = {'categoryorder': 'total ascending'})
-        st.plotly_chart(grafico_barra_cargos, use_container_width = True)
-    else:
-        st.warning("Nenhum dado a ser exibido, selecione um filtro.")
+if not df_filtrado.empty:
+    #exibir os 10 maiores cargos
+    top_cargos = df_filtrado.groupby('cargo')['salario_usd'].mean().nlargest(10).sort_values(ascending = True).reset_index()
+    grafico_barra_cargos = px.bar(
+        top_cargos,
+        x = 'salario_usd',
+        y = "cargo",
+        orientation = 'h', #exibição na horizontal
+        title = 'Top 10 Cargos por Salário',
+        labels = {'salario_usd': 'Salário Médio Anual (USD)', 'cargo': ''}
+    )
+    grafico_barra_cargos.update_layout(title_x = 0.1, yaxis = {'categoryorder': 'total ascending'})
+    st.plotly_chart(grafico_barra_cargos, use_container_width = True)
+else:
+    st.warning("Nenhum dado a ser exibido, selecione um filtro.")
+
+#dividir a exibição dos gráficos em 2 colunas
+col_graf2, col_graf3 = st.columns(2)
 
 with col_graf2:
     if not df_filtrado.empty:
@@ -100,9 +102,6 @@ with col_graf2:
         st.plotly_chart(grafico_hist_salarios, use_container_width = True)
     else:
         st.warning("Nenhum dado a ser exibido, selecione um filtro.")
-
-#dividir a exibição dos gráficos em 2 colunas
-col_graf3, col_graf4 = st.columns(2)
 
 with col_graf3:
     if not df_filtrado.empty:
@@ -121,26 +120,28 @@ with col_graf3:
     else:
         st.warning("Nenhum dado a ser exibido, selecione um filtro.")
 
-with col_graf4:
-    if not df_filtrado.empty:
-        df_datascience = df_filtrado[df_filtrado['cargo'] == 'Data Scientist']
-        media_salarial_pais = df_datascience.groupby('residencia_iso3')['salario_usd'].mean().reset_index()
-        grafico_mapa_paises = px.choropleth(
-            media_salarial_pais,
-            locations = 'residencia_iso3',
-            color = 'salario_usd',
-            color_continuous_scale = 'rdylgn', #https://plotly.com/python/builtin-colorscales/
-            title = "Salário Médio de Cientista de Dados por País",
-            labels = {'salario_usd': 'Salário Médio Anual (USD)', 'residencia_iso3': 'País'},
-        )
-        grafico_mapa_paises.update_layout(title_x = 0.1)
-        st.plotly_chart(grafico_mapa_paises, use_container_width = True)
-    else:
-        st.warning("Nenhum dado a ser exibido, selecione um filtro.")
+col_graf4 = st.columns(1)
+
+if not df_filtrado.empty:
+    df_datascience = df_filtrado[df_filtrado['cargo'] == 'Data Scientist']
+    media_salarial_pais = df_datascience.groupby('residencia_iso3')['salario_usd'].mean().reset_index()
+    grafico_mapa_paises = px.choropleth(
+        media_salarial_pais,
+        locations = 'residencia_iso3',
+        color = 'salario_usd',
+        color_continuous_scale = 'rdylbu', #https://plotly.com/python/builtin-colorscales/
+        title = "Salário Médio de Cientista de Dados por País",
+        labels = {'salario_usd': 'Salário Médio Anual (USD)', 'residencia_iso3': 'País'},
+    )
+    grafico_mapa_paises.update_layout(title_x = 0.1)
+    st.plotly_chart(grafico_mapa_paises, use_container_width = True)
+else:
+    st.warning("Nenhum dado a ser exibido, selecione um filtro.")
+
+st.markdown("---")
 
 st.subheader("Dados Detalhados")
 if not df_filtrado.empty:
     st.dataframe(df_filtrado)
 else:
-
     st.warning("Nenhum dado a ser exibido, selecione um filtro.")
